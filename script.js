@@ -18,17 +18,22 @@ function agregarServicio() {
         return;
     }
 
+    // Formatear la fecha para que muestre solo el día y el mes
+    let fechaObj = new Date(fecha);
+    let fechaFormateada = `${fechaObj.getDate()}/${fechaObj.getMonth() + 1}`;
+
     let precio = tarifas[tipo] * horas;
 
     let nuevoServicio = {
         servicio,
-        fecha,
+        fecha: fechaFormateada,
         horas,
         precio
     };
 
     servicios.push(nuevoServicio);
     actualizarLista();
+    mostrarMensajeConfirmacion();
 }
 
 function actualizarLista() {
@@ -59,4 +64,12 @@ function actualizarLista() {
 function eliminarServicio(index) {
     servicios.splice(index, 1);
     actualizarLista();
+}
+
+function mostrarMensajeConfirmacion() {
+    let mensaje = document.getElementById("mensajeConfirmacion");
+    mensaje.style.display = "block";
+    setTimeout(function() {
+        mensaje.style.display = "none";
+    }, 2000);
 }
