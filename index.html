@@ -30,9 +30,6 @@
 
         <button onclick="agregarServicio()">➕ AÑADIR SERVICIO</button>
 
-        <!-- Mensaje de confirmación -->
-        <div id="mensajeConfirmacion" style="display:none; color: green; font-weight: bold; margin-top: 10px;">Servicio agregado con éxito</div>
-
         <h2>📊 Servicios Añadidos</h2>
         <div id="listaServicios"></div>
 
@@ -40,6 +37,13 @@
             <h2>💰 TOTAL</h2>
             <p><b>Horas Totales:</b> <span id="totalHoras">0</span></p>
             <p id="precioTotalFinal"><b>Precio Total:</b> $<span id="totalPrecio">0.00</span></p>
+        </div>
+    </div>
+
+    <!-- Pestaña flotante de confirmación -->
+    <div id="mensajeModal" class="modal">
+        <div class="modal-content">
+            <p>✅ Añadido con éxito</p>
         </div>
     </div>
 
