@@ -67,9 +67,9 @@ function eliminarServicio(index) {
 }
 
 function mostrarMensajeConfirmacion() {
-    let mensaje = document.getElementById("mensajeConfirmacion");
+    let mensaje = document.getElementById("mensajeModal");
     mensaje.style.display = "block";
-    setTimeout(function() {
+    setTimeout(() => {
         mensaje.style.display = "none";
     }, 2000);
 }
