@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALA PSF 👮🏻‍♂️🚔</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>ALA PSF 👮🏻‍♂️🚔</h1>
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha">
+        
+        <label for="servicio">Nombre del Servicio:</label>
+        <input type="text" id="servicio" placeholder="Ej: Pileta">
+
+        <label for="tipo">Tipo de Adicional:</label>
+        <select id="tipo">
+            <option value="publico_ordinario">Público Ordinario</option>
+            <option value="publico_extraordinario">Público Extraordinario</option>
+            <option value="privado_ordinario">Privado Ordinario</option>
+            <option value="privado_extraordinario">Privado Extraordinario</option>
+        </select>
+
+        <label for="horas">Cantidad de Horas:</label>
+        <input type="number" id="horas" min="1" placeholder="Ej: 8">
+
+        <button onclick="agregarServicio()">Agregar Servicio</button>
+
+        <h2>Servicios Agregados</h2>
+        <ul id="listaServicios"></ul>
+
+        <h2 id="total">Total: $0</h2>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
