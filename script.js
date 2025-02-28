@@ -8,6 +8,20 @@ const tarifas = {
 let servicios = [];
 let botonAgregar = document.getElementById("agregarBtn");
 
+// Cargar servicios desde LocalStorage al iniciar
+function cargarServicios() {
+    const serviciosGuardados = localStorage.getItem("servicios");
+    if (serviciosGuardados) {
+        servicios = JSON.parse(serviciosGuardados);
+        actualizarInterfaz();
+    }
+}
+
+// Guardar servicios en LocalStorage
+function guardarServicios() {
+    localStorage.setItem("servicios", JSON.stringify(servicios));
+}
+
 // Formatear fecha en formato legible
 function formatearFecha(fechaStr) {
     const [year, month, day] = fechaStr.split("-");
@@ -88,7 +102,8 @@ function agregarServicio() {
         tipo
     });
 
-    // Mostrar notificación y actualizar
+    // Guardar servicios y actualizar interfaz
+    guardarServicios();
     mostrarNotificacion();
     actualizarInterfaz();
 }
@@ -134,6 +149,7 @@ function actualizarInterfaz() {
 
 function eliminarServicio(index) {
     servicios.splice(index, 1);
+    guardarServicios(); // Guardar cambios en LocalStorage
     actualizarInterfaz();
 }
 
@@ -141,3 +157,6 @@ function agregarCalendario(servicio, fecha, horaInicio, horaFin) {
     let url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(servicio)}&dates=${fecha.replace(/-/g, '')}T${horaInicio.replace(/:/g, '')}00Z/${fecha.replace(/-/g, '')}T${horaFin.replace(/:/g, '')}00Z`;
     window.open(url, '_blank');
 }
+
+// Cargar servicios al iniciar
+cargarServicios();
