@@ -7,39 +7,34 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>ALA PSF 👮🏻‍♂️🚔</h1>
-
-    <div id="formulario">
-        <label>Nombre del servicio:</label>
-        <input type="text" id="servicio">
-
-        <label>Fecha:</label>
+    <div class="container">
+        <h1>📅 ALA PSF - Cálculo de Adicionales 🚔</h1>
+        
+        <label for="fecha">📆 Fecha:</label>
         <input type="date" id="fecha">
-
-        <label>Hora de inicio:</label>
-        <input type="time" id="horaInicio">
-
-        <label>Hora de fin:</label>
-        <input type="time" id="horaFin">
-
-        <label>Tipo de adicional:</label>
+        
+        <label for="tipo">💼 Tipo de Adicional:</label>
         <select id="tipo">
-            <option value="publico">Público</option>
-            <option value="privado">Privado</option>
+            <option value="publico_ordinario">👮🏻‍♂️ Público Ordinario ($5051,25/h)</option>
+            <option value="publico_extraordinario">🚓 Público Extraordinario ($6061,50/h)</option>
+            <option value="privado_ordinario">🏢 Privado Ordinario ($8378,10/h)</option>
+            <option value="privado_extraordinario">🛑 Privado Extraordinario ($6981,75/h)</option>
         </select>
+        
+        <label for="horas">⏳ Cantidad de Horas:</label>
+        <input type="number" id="horas" min="1" placeholder="Ej: 5">
+        
+        <label for="nombre">✏️ Nombre del Servicio (opcional):</label>
+        <input type="text" id="nombre" placeholder="Ej: Pileta, Evento, etc.">
+        
+        <button onclick="agregarServicio()">✅ Agregar Servicio</button>
 
-        <label>¿Es feriado?</label>
-        <input type="checkbox" id="feriado">
+        <h2>📋 Servicios Registrados:</h2>
+        <ul id="listaServicios"></ul>
 
-        <button id="agregarBtn" onclick="agregarServicio()">➕ AÑADIR</button>
+        <h3>💰 Total Horas: <span id="totalHoras">0</span></h3>
+        <h3>💵 Total a Cobrar: $<span id="totalMonto">0.00</span></h3>
     </div>
-
-    <h2>Servicios Añadidos</h2>
-    <ul id="listaServicios"></ul>
-
-    <h2>Total</h2>
-    <p id="totalHoras">Horas: 0</p>
-    <p id="totalPrecio">Total: $0</p>
 
     <script src="script.js"></script>
 </body>
