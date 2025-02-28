@@ -126,3 +126,9 @@ button:hover {
 .calendar-btn:hover {
     background-color: #45a049;
 }
+
+.precio-servicio {
+    color: #FFD700;
+    font-weight: bold;
+    margin-top: 5px;
+}
