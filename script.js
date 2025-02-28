@@ -8,36 +8,42 @@ const tarifas = {
 let servicios = [];
 let botonAgregar = document.getElementById("agregarBtn");
 
-// Formatear fecha dinámica
-function formatearFecha(fecha) {
-    let fechaObj = new Date(fecha);
-    let opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+// Función para formatear fecha en formato legible
+function formatearFecha(fechaStr) {
+    const [year, month, day] = fechaStr.split("-");
+    const fechaObj = new Date(year, month - 1, day); // Meses en JS son 0-11
+    const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     return fechaObj.toLocaleDateString('es-ES', opciones);
 }
 
-// Lógica de horarios CORREGIDA
-function calcularHoras(fecha, horaInicio, horaFin, esFeriado) {
-    let inicio = new Date(`${fecha}T${horaInicio}`);
-    let fin = new Date(`${fecha}T${horaFin}`);
-    if (fin < inicio) fin.setDate(fin.getDate() + 1);
+// Función para calcular horas ordinarias y extraordinarias
+function calcularHoras(fechaStr, horaInicio, horaFin, esFeriado) {
+    const [year, month, day] = fechaStr.split("-");
+    const [horaInicioH, horaInicioM] = horaInicio.split(":");
+    const [horaFinH, horaFinM] = horaFin.split(":");
+
+    let inicio = new Date(year, month - 1, day, horaInicioH, horaInicioM);
+    let fin = new Date(year, month - 1, day, horaFinH, horaFinM);
+    
+    if (fin < inicio) fin.setDate(fin.getDate() + 1); // Ajustar si pasa de medianoche
 
     let horasOrdinarias = 0;
     let horasExtraordinarias = 0;
     let horaActual = new Date(inicio);
 
     while (horaActual < fin) {
-        let dia = horaActual.getDay(); // 0 = Domingo, 6 = Sábado
-        let hora = horaActual.getHours();
-        let esSabado = dia === 6;
+        const dia = horaActual.getDay(); // 0 = Domingo, 6 = Sábado
+        const hora = horaActual.getHours();
+        const esSabado = dia === 6;
 
         if (esFeriado) {
             horasExtraordinarias++;
         } else {
-            // Domingo: todas extraordinarias
+            // Domingo: todo extraordinario
             if (dia === 0) {
                 horasExtraordinarias++;
             }
-            // Sábado
+            // Sábado: 06:00-12:00 ordinario, resto extraordinario
             else if (esSabado) {
                 if (hora >= 6 && hora < 12) {
                     horasOrdinarias++;
@@ -45,7 +51,7 @@ function calcularHoras(fecha, horaInicio, horaFin, esFeriado) {
                     horasExtraordinarias++;
                 }
             }
-            // Lunes a Viernes
+            // Lunes a Viernes: 06:00-22:00 ordinario, resto extraordinario
             else if (dia >= 1 && dia <= 5) {
                 if (hora >= 6 && hora < 22) {
                     horasOrdinarias++;
@@ -53,12 +59,7 @@ function calcularHoras(fecha, horaInicio, horaFin, esFeriado) {
                     horasExtraordinarias++;
                 }
             }
-            // Horario nocturno (22:00-06:00)
-            else {
-                horasExtraordinarias++;
-            }
         }
-        
         horaActual.setHours(horaActual.getHours() + 1);
     }
 
