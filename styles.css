@@ -73,16 +73,6 @@ button:hover {
     cursor: pointer;
 }
 
-.edit-btn {
-    background-color: #FFD700;
-    border: none;
-    color: black;
-    padding: 5px 10px;
-    border-radius: 3px;
-    cursor: pointer;
-    margin-left: 10px;
-}
-
 .notificacion {
     display: none;
     background-color: #28a745;
@@ -94,26 +84,6 @@ button:hover {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1000;
-}
-
-.notificacion-campana {
-    display: none;
-    background-color: #FFD700;
-    color: black;
-    padding: 15px;
-    border-radius: 5px;
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    animation: campana 1s infinite;
-}
-
-@keyframes campana {
-    0% { transform: rotate(0deg); }
-    25% { transform: rotate(15deg); }
-    50% { transform: rotate(-15deg); }
-    75% { transform: rotate(10deg); }
-    100% { transform: rotate(0deg); }
 }
 
 .total-container {
