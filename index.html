@@ -7,53 +7,39 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <h1>ALA PSF 👮🏻‍♂️🚔</h1>
 
-    <div class="container">
-        <h1>ALA PSF 👮🏻‍♂️🚔</h1>
+    <div id="formulario">
+        <label>Nombre del servicio:</label>
+        <input type="text" id="servicio">
 
-        <!-- Notificaciones -->
-        <div id="notificacion" class="notificacion">✅ Servicio agregado con éxito</div>
-        <div id="notificacionCampana" class="notificacion-campana">🔔 Servicio en 2 horas</div>
-
-        <!-- Formulario -->
-        <label for="servicio">📝 <b>Servicio:</b></label>
-        <input type="text" id="servicio" placeholder="Ej: Vigilancia">
-
-        <label for="fecha">📅 <b>Fecha:</b></label>
+        <label>Fecha:</label>
         <input type="date" id="fecha">
 
-        <label for="horaInicio">⏰ <b>Hora inicio:</b></label>
-        <input type="time" id="horaInicio" step="3600">
+        <label>Hora de inicio:</label>
+        <input type="time" id="horaInicio">
 
-        <label for="horaFin">⏰ <b>Hora fin:</b></label>
-        <input type="time" id="horaFin" step="3600">
+        <label>Hora de fin:</label>
+        <input type="time" id="horaFin">
 
-        <label for="tipo">⚖️ <b>Tipo:</b></label>
+        <label>Tipo de adicional:</label>
         <select id="tipo">
             <option value="publico">Público</option>
             <option value="privado">Privado</option>
         </select>
 
-        <!-- Feriado -->
-        <label class="feriado-checkbox">
-            <input type="checkbox" id="feriado"> 
-            <span class="feriado-icon">🎉</span> Feriado
-        </label>
+        <label>¿Es feriado?</label>
+        <input type="checkbox" id="feriado">
 
         <button id="agregarBtn" onclick="agregarServicio()">➕ AÑADIR</button>
-
-        <!-- Lista -->
-        <h2>📊 Servicios</h2>
-        <div id="listaServicios"></div>
-
-        <!-- Total -->
-        <div class="total-container">
-            <h2>💰 TOTAL</h2>
-            <p><b>Horas Ordinarias:</b> <span id="totalOrdinarias">0</span></p>
-            <p><b>Horas Extraordinarias:</b> <span id="totalExtraordinarias">0</span></p>
-            <p><b>Total:</b> $<span id="totalPrecio">0.00</span></p>
-        </div>
     </div>
+
+    <h2>Servicios Añadidos</h2>
+    <ul id="listaServicios"></ul>
+
+    <h2>Total</h2>
+    <p id="totalHoras">Horas: 0</p>
+    <p id="totalPrecio">Total: $0</p>
 
     <script src="script.js"></script>
 </body>
