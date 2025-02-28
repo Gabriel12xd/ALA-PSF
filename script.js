@@ -8,6 +8,13 @@ const tarifas = {
 let servicios = [];
 let botonAgregar = document.getElementById("agregarBtn");
 
+// Formatear fecha dinámica
+function formatearFecha(fecha) {
+    let fechaObj = new Date(fecha);
+    let opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    return fechaObj.toLocaleDateString('es-ES', opciones);
+}
+
 // Lógica de horarios
 function calcularHoras(fecha, horaInicio, horaFin, esFeriado) {
     let inicio = new Date(`${fecha}T${horaInicio}`);
@@ -72,6 +79,10 @@ function agregarServicio() {
         return;
     }
 
+    // Asegurar que las horas tengan 00 minutos
+    horaInicio = horaInicio.split(":")[0] + ":00";
+    horaFin = horaFin.split(":")[0] + ":00";
+
     // Cálculos
     let { ordinarias, extraordinarias } = calcularHoras(fecha, horaInicio, horaFin, esFeriado);
     let precio = (tarifas[`${tipo}_ordinario`] * ordinarias) + (tarifas[`${tipo}_extraordinario`] * extraordinarias);
@@ -79,7 +90,7 @@ function agregarServicio() {
     // Guardar servicio
     servicios.push({
         servicio,
-        fecha,
+        fecha: formatearFecha(fecha),
         horaInicio,
         horaFin,
         ordinarias,
@@ -112,6 +123,7 @@ function actualizarInterfaz() {
                 ${servicio.fecha} | ${servicio.horaInicio} - ${servicio.horaFin}
                 <button class="delete-btn" onclick="eliminarServicio(${index})">🗑️</button>
                 <button class="calendar-btn" onclick="agregarCalendario('${servicio.servicio}', '${servicio.fecha}', '${servicio.horaInicio}', '${servicio.horaFin}')">📅</button>
+                <div class="precio-servicio">$${servicio.precio.toFixed(2)}</div>
                 <span style="color: #28a745">(${servicio.ordinarias.toFixed(1)}h ordinarias)</span>
                 <span style="color: #ff4444">(${servicio.extraordinarias.toFixed(1)}h extraordinarias)</span>
             </div>
@@ -147,4 +159,4 @@ function programarNotificacion(fecha, horaInicio) {
             setTimeout(() => campana.style.display = "none", 10000);
         }, diferencia);
     }
-                    }
+}
