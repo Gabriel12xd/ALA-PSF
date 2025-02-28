@@ -100,8 +100,17 @@ function agregarServicio() {
         tipo
     });
 
+    mostrarNotificacion();
     actualizarInterfaz();
     programarNotificacion(fecha, horaInicio);
+}
+
+function mostrarNotificacion() {
+    let notificacion = document.getElementById("notificacion");
+    notificacion.style.display = "block";
+    setTimeout(() => {
+        notificacion.style.display = "none";
+    }, 2000);
 }
 
 function actualizarInterfaz() {
@@ -123,6 +132,7 @@ function actualizarInterfaz() {
                 <b>${servicio.servicio}</b><br>
                 ${servicio.fecha} | ${servicio.horaInicio} - ${servicio.horaFin}
                 <button class="delete-btn" onclick="eliminarServicio(${index})">🗑️</button>
+                <button class="edit-btn" onclick="editarServicio(${index})">✏️</button>
                 <button class="calendar-btn" onclick="agregarCalendario('${servicio.servicio}', '${servicio.fecha}', '${servicio.horaInicio}', '${servicio.horaFin}')">📅</button>
                 <div class="precio-servicio">$${servicio.precio.toFixed(2)}</div>
                 <span style="color: #28a745">(${servicio.ordinarias.toFixed(1)}h ordinarias)</span>
@@ -134,6 +144,43 @@ function actualizarInterfaz() {
     document.getElementById("totalOrdinarias").textContent = totalOrdinarias.toFixed(1);
     document.getElementById("totalExtraordinarias").textContent = totalExtraordinarias.toFixed(1);
     document.getElementById("totalPrecio").textContent = totalPrecio.toFixed(2);
+}
+
+function editarServicio(index) {
+    let servicio = servicios[index];
+    document.getElementById("servicio").value = servicio.servicio;
+    document.getElementById("fecha").value = new Date(servicio.fecha).toISOString().split("T")[0];
+    document.getElementById("horaInicio").value = servicio.horaInicio;
+    document.getElementById("horaFin").value = servicio.horaFin;
+    document.getElementById("tipo").value = servicio.tipo;
+    document.getElementById("feriado").checked = servicio.esFeriado || false;
+
+    // Cambiar el botón de agregar a guardar edición
+    botonAgregar.textContent = "💾 GUARDAR CAMBIOS";
+    botonAgregar.onclick = () => guardarEdicion(index);
+}
+
+function guardarEdicion(index) {
+    let servicio = servicios[index];
+    servicio.servicio = document.getElementById("servicio").value;
+    servicio.fecha = formatearFecha(document.getElementById("fecha").value);
+    servicio.horaInicio = document.getElementById("horaInicio").value;
+    servicio.horaFin = document.getElementById("horaFin").value;
+    servicio.tipo = document.getElementById("tipo").value;
+    servicio.esFeriado = document.getElementById("feriado").checked;
+
+    // Recalcular horas y precio
+    let { ordinarias, extraordinarias } = calcularHoras(document.getElementById("fecha").value, servicio.horaInicio, servicio.horaFin, servicio.esFeriado);
+    servicio.ordinarias = ordinarias;
+    servicio.extraordinarias = extraordinarias;
+    servicio.precio = (tarifas[`${servicio.tipo}_ordinario`] * ordinarias) + (tarifas[`${servicio.tipo}_extraordinario`] * extraordinarias);
+
+    // Restaurar el botón de agregar
+    botonAgregar.textContent = "➕ AÑADIR";
+    botonAgregar.onclick = agregarServicio;
+
+    mostrarNotificacion();
+    actualizarInterfaz();
 }
 
 function agregarCalendario(servicio, fecha, horaInicio, horaFin) {
