@@ -73,6 +73,16 @@ button:hover {
     cursor: pointer;
 }
 
+.edit-btn {
+    background-color: #FFD700;
+    border: none;
+    color: black;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
 .notificacion {
     display: none;
     background-color: #28a745;
@@ -131,4 +141,4 @@ button:hover {
     color: #FFD700;
     font-weight: bold;
     margin-top: 5px;
-}
+    }
