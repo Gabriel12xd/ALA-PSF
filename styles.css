@@ -2,7 +2,6 @@ body {
     font-family: Arial, sans-serif;
     background-color: #121212;
     color: white;
-    text-align: center;
     margin: 0;
     padding: 20px;
 }
@@ -13,45 +12,28 @@ body {
     background-color: #1e1e1e;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
 }
 
 h1 {
     color: #FFD700;
-    font-size: 28px;
-    font-weight: bold;
+    text-align: center;
+    margin-bottom: 25px;
 }
 
-h2 {
-    color: #FFD700;
-    font-size: 22px;
-    font-weight: bold;
-}
-
-label {
-    display: block;
-    margin: 10px 0 5px;
-    font-weight: bold;
-}
-
-input, select {
+input, select, button {
     width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
+    padding: 10px;
+    margin-bottom: 15px;
     border-radius: 5px;
     border: none;
     font-size: 16px;
 }
 
 button {
-    width: 100%;
-    padding: 10px;
-    font-size: 18px;
-    font-weight: bold;
-    color: white;
     background-color: #007BFF;
-    border: none;
-    border-radius: 5px;
+    color: white;
+    font-weight: bold;
     cursor: pointer;
     transition: 0.3s;
 }
@@ -60,56 +42,87 @@ button:hover {
     background-color: #0056b3;
 }
 
-.servicio-item {
-    background-color: #333;
+.feriado-checkbox {
+    display: block;
+    margin: 15px 0;
     padding: 10px;
-    margin: 5px 0;
+    background-color: #333;
     border-radius: 5px;
-}
-
-.delete-btn {
-    background-color: red;
-    border: none;
-    color: white;
-    padding: 5px;
-    margin-left: 10px;
     cursor: pointer;
 }
 
-.delete-btn:hover {
-    background-color: darkred;
+.feriado-checkbox input:checked + .feriado-icon {
+    color: #FFD700;
+    text-shadow: 0 0 10px gold;
 }
 
-/* 🔥 PRECIO FINAL GRANDE Y RESALTADO 🔥 */
-.total-container {
-    background-color: #FFD700;
-    color: black;
-    padding: 15px;
-    border-radius: 10px;
-    margin-top: 20px;
-    font-size: 24px;
-    font-weight: bold;
+.servicio-item {
+    background-color: #333;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    position: relative;
 }
 
-#precioTotalFinal {
-    font-size: 30px;
-    font-weight: bold;
-    margin-top: 10px;
+.delete-btn {
+    background-color: #ff4444;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
 }
 
-/* 🔹 Pestaña flotante (modal) para mostrar confirmación */
-.modal {
+.notificacion {
     display: none;
+    background-color: #28a745;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #28a745;
-    color: white;
-    padding: 20px;
+    z-index: 1000;
+}
+
+.notificacion-campana {
+    display: none;
+    background-color: #FFD700;
+    color: black;
+    padding: 15px;
+    border-radius: 5px;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    animation: campana 1s infinite;
+}
+
+@keyframes campana {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(15deg); }
+    50% { transform: rotate(-15deg); }
+    75% { transform: rotate(10deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.total-container {
+    background-color: #2c3e50;
+    padding: 15px;
     border-radius: 10px;
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+    margin-top: 20px;
+}
+
+.calendar-btn {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.calendar-btn:hover {
+    background-color: #45a049;
 }
