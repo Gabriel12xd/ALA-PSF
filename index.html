@@ -7,33 +7,52 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
     <div class="container">
-        <h1>📅 ALA PSF - Cálculo de Adicionales 🚔</h1>
-        
-        <label for="fecha">📆 Fecha:</label>
+        <h1>ALA PSF 👮🏻‍♂️🚔</h1>
+
+        <!-- Notificaciones -->
+        <div id="notificacion" class="notificacion">✅ Servicio agregado con éxito</div>
+        <div id="notificacionCampana" class="notificacion-campana">🔔 Servicio en 2 horas</div>
+
+        <!-- Formulario -->
+        <label for="servicio">📝 <b>Servicio:</b></label>
+        <input type="text" id="servicio" placeholder="Ej: Vigilancia">
+
+        <label for="fecha">📅 <b>Fecha:</b></label>
         <input type="date" id="fecha">
-        
-        <label for="tipo">💼 Tipo de Adicional:</label>
+
+        <label for="horaInicio">⏰ <b>Hora inicio:</b></label>
+        <input type="time" id="horaInicio" step="3600">
+
+        <label for="horaFin">⏰ <b>Hora fin:</b></label>
+        <input type="time" id="horaFin" step="3600">
+
+        <label for="tipo">⚖️ <b>Tipo:</b></label>
         <select id="tipo">
-            <option value="publico_ordinario">👮🏻‍♂️ Público Ordinario ($5051,25/h)</option>
-            <option value="publico_extraordinario">🚓 Público Extraordinario ($6061,50/h)</option>
-            <option value="privado_ordinario">🏢 Privado Ordinario ($8378,10/h)</option>
-            <option value="privado_extraordinario">🛑 Privado Extraordinario ($6981,75/h)</option>
+            <option value="publico">Público</option>
+            <option value="privado">Privado</option>
         </select>
-        
-        <label for="horas">⏳ Cantidad de Horas:</label>
-        <input type="number" id="horas" min="1" placeholder="Ej: 5">
-        
-        <label for="nombre">✏️ Nombre del Servicio (opcional):</label>
-        <input type="text" id="nombre" placeholder="Ej: Pileta, Evento, etc.">
-        
-        <button onclick="agregarServicio()">✅ Agregar Servicio</button>
 
-        <h2>📋 Servicios Registrados:</h2>
-        <ul id="listaServicios"></ul>
+        <!-- Feriado -->
+        <label class="feriado-checkbox">
+            <input type="checkbox" id="feriado"> 
+            <span class="feriado-icon">🎉</span> Feriado
+        </label>
 
-        <h3>💰 Total Horas: <span id="totalHoras">0</span></h3>
-        <h3>💵 Total a Cobrar: $<span id="totalMonto">0.00</span></h3>
+        <button id="agregarBtn" onclick="agregarServicio()">➕ AÑADIR</button>
+
+        <!-- Lista -->
+        <h2>📊 Servicios</h2>
+        <div id="listaServicios"></div>
+
+        <!-- Total -->
+        <div class="total-container">
+            <h2>💰 TOTAL</h2>
+            <p><b>Horas Ordinarias:</b> <span id="totalOrdinarias">0</span></p>
+            <p><b>Horas Extraordinarias:</b> <span id="totalExtraordinarias">0</span></p>
+            <p><b>Total:</b> $<span id="totalPrecio">0.00</span></p>
+        </div>
     </div>
 
     <script src="script.js"></script>
