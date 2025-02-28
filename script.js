@@ -7,17 +7,16 @@ const tarifas = {
 
 let servicios = [];
 let botonAgregar = document.getElementById("agregarBtn");
-let editandoIndex = null; // Para rastrear si estamos editando un servicio
 
-// Función para formatear fecha en formato legible
+// Formatear fecha en formato legible
 function formatearFecha(fechaStr) {
     const [year, month, day] = fechaStr.split("-");
-    const fechaObj = new Date(year, month - 1, day); // Meses en JS son 0-11
+    const fechaObj = new Date(year, month - 1, day);
     const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     return fechaObj.toLocaleDateString('es-ES', opciones);
 }
 
-// Función para calcular horas ordinarias y extraordinarias
+// Calcular horas ordinarias/extraordinarias
 function calcularHoras(fechaStr, horaInicio, horaFin, esFeriado) {
     const [year, month, day] = fechaStr.split("-");
     const [horaInicioH, horaInicioM] = horaInicio.split(":");
@@ -26,39 +25,28 @@ function calcularHoras(fechaStr, horaInicio, horaFin, esFeriado) {
     let inicio = new Date(year, month - 1, day, horaInicioH, horaInicioM);
     let fin = new Date(year, month - 1, day, horaFinH, horaFinM);
     
-    if (fin < inicio) fin.setDate(fin.getDate() + 1); // Ajustar si pasa de medianoche
+    if (fin < inicio) fin.setDate(fin.getDate() + 1);
 
     let horasOrdinarias = 0;
     let horasExtraordinarias = 0;
     let horaActual = new Date(inicio);
 
     while (horaActual < fin) {
-        const dia = horaActual.getDay(); // 0 = Domingo, 6 = Sábado
+        const dia = horaActual.getDay();
         const hora = horaActual.getHours();
         const esSabado = dia === 6;
 
         if (esFeriado) {
             horasExtraordinarias++;
         } else {
-            // Domingo: todo extraordinario
-            if (dia === 0) {
+            if (dia === 0) { // Domingo
                 horasExtraordinarias++;
-            }
-            // Sábado: 06:00-12:00 ordinario, resto extraordinario
-            else if (esSabado) {
-                if (hora >= 6 && hora < 12) {
-                    horasOrdinarias++;
-                } else {
-                    horasExtraordinarias++;
-                }
-            }
-            // Lunes a Viernes: 06:00-22:00 ordinario, resto extraordinario
-            else if (dia >= 1 && dia <= 5) {
-                if (hora >= 6 && hora < 22) {
-                    horasOrdinarias++;
-                } else {
-                    horasExtraordinarias++;
-                }
+            } else if (esSabado) { // Sábado
+                horasOrdinarias += (hora >= 6 && hora < 12) ? 1 : 0;
+                horasExtraordinarias += (hora >= 12 || hora < 6) ? 1 : 0;
+            } else { // Lunes a Viernes
+                horasOrdinarias += (hora >= 6 && hora < 22) ? 1 : 0;
+                horasExtraordinarias += (hora >= 22 || hora < 6) ? 1 : 0;
             }
         }
         horaActual.setHours(horaActual.getHours() + 1);
@@ -68,7 +56,6 @@ function calcularHoras(fechaStr, horaInicio, horaFin, esFeriado) {
 }
 
 function agregarServicio() {
-    // Validación y recolección de datos
     let servicio = document.getElementById("servicio").value;
     let fecha = document.getElementById("fecha").value;
     let horaInicio = document.getElementById("horaInicio").value;
@@ -81,50 +68,29 @@ function agregarServicio() {
         return;
     }
 
-    // Asegurar que las horas tengan 00 minutos
+    // Asegurar formato de hora
     horaInicio = horaInicio.split(":")[0] + ":00";
     horaFin = horaFin.split(":")[0] + ":00";
 
-    // Cálculos
+    // Calcular horas
     let { ordinarias, extraordinarias } = calcularHoras(fecha, horaInicio, horaFin, esFeriado);
     let precio = (tarifas[`${tipo}_ordinario`] * ordinarias) + (tarifas[`${tipo}_extraordinario`] * extraordinarias);
 
-    // Si estamos editando, actualizamos el servicio existente
-    if (editandoIndex !== null) {
-        servicios[editandoIndex] = {
-            servicio,
-            fecha: formatearFecha(fecha),
-            horaInicio,
-            horaFin,
-            ordinarias,
-            extraordinarias,
-            precio,
-            tipo,
-            esFeriado
-        };
-        editandoIndex = null; // Reseteamos el índice de edición
-    } else {
-        // Si no, agregamos un nuevo servicio
-        servicios.push({
-            servicio,
-            fecha: formatearFecha(fecha),
-            horaInicio,
-            horaFin,
-            ordinarias,
-            extraordinarias,
-            precio,
-            tipo,
-            esFeriado
-        });
-    }
+    // Agregar servicio
+    servicios.push({
+        servicio,
+        fecha: formatearFecha(fecha),
+        horaInicio,
+        horaFin,
+        ordinarias,
+        extraordinarias,
+        precio,
+        tipo
+    });
 
+    // Mostrar notificación y actualizar
     mostrarNotificacion();
     actualizarInterfaz();
-    programarNotificacion(fecha, horaInicio);
-
-    // Restaurar el botón de agregar
-    botonAgregar.textContent = "➕ AÑADIR";
-    botonAgregar.onclick = agregarServicio;
 }
 
 function mostrarNotificacion() {
@@ -136,7 +102,6 @@ function mostrarNotificacion() {
 }
 
 function actualizarInterfaz() {
-    // Actualizar lista y totales
     let lista = document.getElementById("listaServicios");
     lista.innerHTML = "";
     
@@ -154,7 +119,6 @@ function actualizarInterfaz() {
                 <b>${servicio.servicio}</b><br>
                 ${servicio.fecha} | ${servicio.horaInicio} - ${servicio.horaFin}
                 <button class="delete-btn" onclick="eliminarServicio(${index})">🗑️</button>
-                <button class="edit-btn" onclick="editarServicio(${index})">✏️</button>
                 <button class="calendar-btn" onclick="agregarCalendario('${servicio.servicio}', '${servicio.fecha}', '${servicio.horaInicio}', '${servicio.horaFin}')">📅</button>
                 <div class="precio-servicio">$${servicio.precio.toFixed(2)}</div>
                 <span style="color: #28a745">(${servicio.ordinarias.toFixed(1)}h ordinarias)</span>
@@ -168,47 +132,12 @@ function actualizarInterfaz() {
     document.getElementById("totalPrecio").textContent = totalPrecio.toFixed(2);
 }
 
-function editarServicio(index) {
-    let servicio = servicios[index];
-    document.getElementById("servicio").value = servicio.servicio;
-    document.getElementById("fecha").value = new Date(servicio.fecha).toISOString().split("T")[0];
-    document.getElementById("horaInicio").value = servicio.horaInicio;
-    document.getElementById("horaFin").value = servicio.horaFin;
-    document.getElementById("tipo").value = servicio.tipo;
-    document.getElementById("feriado").checked = servicio.esFeriado || false;
-
-    // Cambiar el botón de agregar a guardar edición
-    botonAgregar.textContent = "💾 GUARDAR CAMBIOS";
-    botonAgregar.onclick = () => guardarEdicion(index);
-    editandoIndex = index; // Guardamos el índice del servicio que estamos editando
-}
-
-function guardarEdicion(index) {
-    agregarServicio(); // Reutilizamos la función de agregar para guardar cambios
-}
-
-function agregarCalendario(servicio, fecha, horaInicio, horaFin) {
-    let url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(servicio)}&dates=${fecha.replace(/-/g, '')}T${horaInicio.replace(/:/g, '')}00Z/${fecha.replace(/-/g, '')}T${horaFin.replace(/:/g, '')}00Z&ctz=UTC&sf=true&output=xml`;
-    window.open(url, '_blank');
-}
-
 function eliminarServicio(index) {
     servicios.splice(index, 1);
     actualizarInterfaz();
 }
 
-function programarNotificacion(fecha, horaInicio) {
-    let tiempoNotificacion = new Date(`${fecha}T${horaInicio}`);
-    tiempoNotificacion.setHours(tiempoNotificacion.getHours() - 2);
-    
-    let ahora = new Date();
-    let diferencia = tiempoNotificacion - ahora;
-
-    if (diferencia > 0) {
-        setTimeout(() => {
-            let campana = document.getElementById("notificacionCampana");
-            campana.style.display = "block";
-            setTimeout(() => campana.style.display = "none", 10000);
-        }, diferencia);
-    }
+function agregarCalendario(servicio, fecha, horaInicio, horaFin) {
+    let url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(servicio)}&dates=${fecha.replace(/-/g, '')}T${horaInicio.replace(/:/g, '')}00Z/${fecha.replace(/-/g, '')}T${horaFin.replace(/:/g, '')}00Z`;
+    window.open(url, '_blank');
 }
