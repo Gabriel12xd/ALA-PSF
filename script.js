@@ -15,52 +15,52 @@ function formatearFecha(fecha) {
     return fechaObj.toLocaleDateString('es-ES', opciones);
 }
 
-// Lógica de horarios
+// Lógica de horarios CORREGIDA
 function calcularHoras(fecha, horaInicio, horaFin, esFeriado) {
     let inicio = new Date(`${fecha}T${horaInicio}`);
     let fin = new Date(`${fecha}T${horaFin}`);
-    if (fin < inicio) fin.setDate(fin.getDate() + 1); // Ajustar si pasa de medianoche
+    if (fin < inicio) fin.setDate(fin.getDate() + 1);
 
-    let horasTotales = (fin - inicio) / (1000 * 60 * 60);
     let horasOrdinarias = 0;
     let horasExtraordinarias = 0;
+    let horaActual = new Date(inicio);
 
-    let dia = inicio.getDay(); // 0 = Domingo, 6 = Sábado
-    let esSabado = dia === 6;
+    while (horaActual < fin) {
+        let dia = horaActual.getDay(); // 0 = Domingo, 6 = Sábado
+        let hora = horaActual.getHours();
+        let esSabado = dia === 6;
 
-    // Feriado: todo extraordinario
-    if (esFeriado) {
-        horasExtraordinarias = horasTotales;
-        return { ordinarias: 0, extraordinarias: horasExtraordinarias };
-    }
-
-    // Domingo: todo extraordinario
-    if (dia === 0) {
-        horasExtraordinarias = horasTotales;
-        return { ordinarias: 0, extraordinarias: horasExtraordinarias };
-    }
-
-    // Sábado: antes de las 12 ordinario, después extraordinario
-    if (esSabado) {
-        let horaCorte = new Date(`${fecha}T12:00`);
-        if (inicio < horaCorte) {
-            horasOrdinarias = Math.min((horaCorte - inicio) / (1000 * 60 * 60), horasTotales);
+        if (esFeriado) {
+            horasExtraordinarias++;
+        } else {
+            // Domingo: todas extraordinarias
+            if (dia === 0) {
+                horasExtraordinarias++;
+            }
+            // Sábado
+            else if (esSabado) {
+                if (hora >= 6 && hora < 12) {
+                    horasOrdinarias++;
+                } else {
+                    horasExtraordinarias++;
+                }
+            }
+            // Lunes a Viernes
+            else if (dia >= 1 && dia <= 5) {
+                if (hora >= 6 && hora < 22) {
+                    horasOrdinarias++;
+                } else {
+                    horasExtraordinarias++;
+                }
+            }
+            // Horario nocturno (22:00-06:00)
+            else {
+                horasExtraordinarias++;
+            }
         }
-        horasExtraordinarias = horasTotales - horasOrdinarias;
-        return { ordinarias: horasOrdinarias, extraordinarias: horasExtraordinarias };
+        
+        horaActual.setHours(horaActual.getHours() + 1);
     }
-
-    // Lunes a Viernes: 06:00-22:00 ordinario, 22:00-06:00 extraordinario
-    let horaInicioOrdinario = new Date(`${fecha}T06:00`);
-    let horaFinOrdinario = new Date(`${fecha}T22:00`);
-
-    if (inicio < horaInicioOrdinario) {
-        horasExtraordinarias += Math.min((horaInicioOrdinario - inicio) / (1000 * 60 * 60), horasTotales);
-    }
-    if (fin > horaFinOrdinario) {
-        horasExtraordinarias += Math.min((fin - horaFinOrdinario) / (1000 * 60 * 60), horasTotales);
-    }
-    horasOrdinarias = horasTotales - horasExtraordinarias;
 
     return { ordinarias: horasOrdinarias, extraordinarias: horasExtraordinarias };
 }
