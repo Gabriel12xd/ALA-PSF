@@ -11,43 +11,50 @@
     <div class="container">
         <h1>ALA PSF 👮🏻‍♂️🚔</h1>
 
+        <!-- Notificaciones -->
+        <div id="notificacion" class="notificacion">✅ Servicio agregado</div>
+        <div id="notificacionCampana" class="notificacion-campana">🔔 Servicio en 2 horas</div>
+
+        <!-- Formulario -->
         <label for="servicio">📝 <b>Servicio:</b></label>
-        <input type="text" id="servicio" placeholder="Ejemplo: Pileta">
+        <input type="text" id="servicio" placeholder="Ej: Vigilancia">
 
         <label for="fecha">📅 <b>Fecha:</b></label>
         <input type="date" id="fecha">
 
-        <label for="horas">⏳ <b>Horas:</b></label>
-        <input type="number" id="horas" min="1" placeholder="Ejemplo: 8">
+        <label for="horaInicio">⏰ <b>Hora inicio:</b></label>
+        <input type="time" id="horaInicio">
 
-        <label for="tipo">⚖️ <b>Tipo de Adicional:</b></label>
+        <label for="horaFin">⏰ <b>Hora fin:</b></label>
+        <input type="time" id="horaFin">
+
+        <label for="tipo">⚖️ <b>Tipo:</b></label>
         <select id="tipo">
-            <option value="publico_ordinario">📌 Público Ordinario</option>
-            <option value="publico_extraordinario">🔥 Público Extraordinario</option>
-            <option value="privado_ordinario">🏛️ Privado Ordinario</option>
-            <option value="privado_extraordinario">💼 Privado Extraordinario</option>
+            <option value="publico">Público</option>
+            <option value="privado">Privado</option>
         </select>
 
-        <button onclick="agregarServicio()">➕ AÑADIR SERVICIO</button>
+        <!-- Feriado -->
+        <label class="feriado-checkbox">
+            <input type="checkbox" id="feriado"> 
+            <span class="feriado-icon">🎉</span> Feriado
+        </label>
 
-        <h2>📊 Servicios Añadidos</h2>
+        <button id="agregarBtn" onclick="agregarServicio()">➕ AÑADIR</button>
+
+        <!-- Lista -->
+        <h2>📊 Servicios</h2>
         <div id="listaServicios"></div>
 
+        <!-- Total -->
         <div class="total-container">
             <h2>💰 TOTAL</h2>
-            <p><b>Horas Totales:</b> <span id="totalHoras">0</span></p>
-            <p id="precioTotalFinal"><b>Precio Total:</b> $<span id="totalPrecio">0.00</span></p>
-        </div>
-    </div>
-
-    <!-- Pestaña flotante de confirmación -->
-    <div id="mensajeModal" class="modal">
-        <div class="modal-content">
-            <p>✅ Añadido con éxito</p>
+            <p><b>Horas Ordinarias:</b> <span id="totalOrdinarias">0</span></p>
+            <p><b>Horas Extraordinarias:</b> <span id="totalExtraordinarias">0</span></p>
+            <p><b>Total:</b> $<span id="totalPrecio">0.00</span></p>
         </div>
     </div>
 
     <script src="script.js"></script>
-
 </body>
 </html>
