@@ -112,3 +112,12 @@ button:hover {
     font-weight: bold;
     margin-top: 5px;
 }
+
+/* Estilo para el precio final total */
+#totalPrecio {
+    font-size: 32px; /* Tamaño grande */
+    color: #FFD700; /* Color dorado */
+    font-weight: bold;
+    display: block; /* Para que ocupe su propia línea */
+    margin-top: 10px; /* Espaciado superior */
+}
